@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchActors } from 'services/TmbdApi';
-import Loader from 'components/Loader/Loader';
+import { fetchActors } from '../API/Api';
+import Loader from '../Loader/Loader';
 import { List, Text } from './Cast.styled';
 
 const Cast = () => {
@@ -10,22 +10,18 @@ const Cast = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const onActorsOfMovie = () => {
-      setLoading(true);
+    setLoading(true);
 
-      fetchActors(movieId)
-        .then(actors => {
-          setActors(actors);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
-
-    onActorsOfMovie();
+    fetchActors(movieId)
+      .then(actors => {
+        setActors(actors);
+      })
+      .catch(error => {
+        console.error('Error fetching cast:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [movieId]);
 
   return (
@@ -52,4 +48,5 @@ const Cast = () => {
     </div>
   );
 };
+
 export default Cast;

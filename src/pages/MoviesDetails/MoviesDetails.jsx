@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieDetails } from './Api';
+import { fetchMovieDetails } from '../../components/API/Api';
+import Loader from '../../components/Loader/Loader';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    getMovieDetails(movieId).then(data => setMovie(data));
+    fetchMovieDetails(movieId)
+      .then(data => setMovie(data))
+      .catch(error => {
+        console.error('Error fetching movie details:', error);
+      });
   }, [movieId]);
 
   if (!movie) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

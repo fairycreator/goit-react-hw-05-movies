@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { SearchForm, Input, Button } from './Form.styled';
+import { SearchForm, Input, Button } from './Movies.styled';
 
 const Movies = ({ searchMovies }) => {
   const [query, setQuery] = useState('');

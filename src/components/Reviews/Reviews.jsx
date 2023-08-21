@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchReviews } from 'services/TmbdApi';
-import Loader from 'components/Loader/Loader';
+import { fetchReviews } from '../API/Api';
+import Loader from '../Loader/Loader';
 import { List } from './Reviews.styled';
 
 const Reviews = () => {
@@ -29,15 +29,22 @@ const Reviews = () => {
   }, [movieId]);
   return (
     <div>
-      <h2>Reviews</h2>
-      <ul>
-        {reviews.map(review => (
-          <li key={review.id}>
-            <p>Author: {review.author}</p>
-            <p>{review.content}</p>
-          </li>
-        ))}
-      </ul>
+      {loading && <Loader />}
+      {reviews.length !== 0 && (
+        <div>
+          <List>
+            {reviews.map(review => (
+              <li key={review.id}>
+                <h2>Author: {review.author}</h2>
+                <p>{review.content}</p>
+              </li>
+            ))}
+          </List>
+        </div>
+      )}
+      {reviews.length === 0 && (
+        <div>We don't have any reviews for this movie</div>
+      )}
     </div>
   );
 };
