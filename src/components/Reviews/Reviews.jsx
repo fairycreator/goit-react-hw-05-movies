@@ -1,52 +1,25 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchReviews } from '../API/Api';
-import Loader from '../Loader/Loader';
-import { List } from './Reviews.styled';
+import { getReviews } from '../API/Api';
 
 const Reviews = () => {
+  const [reviewsList, setReviewsList] = useState([]);
   const { movieId } = useParams();
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    const fetchReviewsFilms = () => {
-      setLoading(true);
-
-      fetchReviews(movieId)
-        .then(reviews => {
-          setReviews(reviews);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
-
-    fetchReviewsFilms();
+    getReviews(movieId).then(data => setReviewsList(data.results));
   }, [movieId]);
+
   return (
-    <div>
-      {loading && <Loader />}
-      {reviews.length !== 0 && (
-        <div>
-          <List>
-            {reviews.map(review => (
-              <li key={review.id}>
-                <h2>Author: {review.author}</h2>
-                <p>{review.content}</p>
-              </li>
-            ))}
-          </List>
-        </div>
-      )}
-      {reviews.length === 0 && (
-        <div>We don't have any reviews for this movie</div>
-      )}
-    </div>
+    <ul>
+      {reviewsList.length > 0
+        ? reviewsList.map(({ author, content, id }) => (
+            <li key={id}>
+              <h3>{author}</h3>
+              <p>{content}</p>
+            </li>
+          ))
+        : "Sorry, we don't have any review for this movie"}
+    </ul>
   );
 };
-
 export default Reviews;

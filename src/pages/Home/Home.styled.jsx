@@ -1,29 +1,24 @@
-import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-
-export const Main = styled.main`
-  text-align: center;
-`;
-
-export const Title = styled.h1`
-  font-size: 24px;
-  margin-bottom: 20px;
-`;
-
-export const StyledList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-export const StyledItem = styled.li`
-  margin-bottom: 10px;
-`;
+import styled from 'styled-components';
 
 export const MovieLink = styled(Link)`
-  color: #007bff;
   text-decoration: none;
+  padding: 2px 8px;
 
   &:hover {
-    text-decoration: underline;
+    border-radius: 5px;
+    box-shadow: 1px 2px 4px 3px rgba(0, 0, 0, 0.5);
   }
+`;
+export const MovieList = styled.ul`
+  padding: 20px 0 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+`;
+
+export const Title = styled.h2`
+  margin-top: 40px;
+  margin-bottom: 0;
 `;

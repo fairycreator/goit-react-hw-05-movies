@@ -1,51 +1,36 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchActors } from '../API/Api';
-import Loader from '../Loader/Loader';
-import { List, Text } from './Cast.styled';
+import { getMovieCredits } from '../API/Api';
+import { CastItem, CastList, Character, Name } from './Cast.styled';
 
 const Cast = () => {
+  const [castList, setCastList] = useState([]);
   const { movieId } = useParams();
-  const [actors, setActors] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    setLoading(true);
-
-    fetchActors(movieId)
-      .then(actors => {
-        setActors(actors);
-      })
-      .catch(error => {
-        console.error('Error fetching cast:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    getMovieCredits(movieId).then(data => setCastList(data.cast));
   }, [movieId]);
-
   return (
-    <div>
-      {loading && <Loader />}
-
-      <List>
-        {actors.map(({ id, profile_path, original_name, name, character }) => (
-          <li key={id}>
-            <img
-              width="200px"
-              src={
-                profile_path
-                  ? `https://image.tmdb.org/t/p/w500${profile_path}`
-                  : `https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg`
-              }
-              alt={original_name}
-            />
-            <Text>{name}</Text>
-            <Text>Character: {character}</Text>
-          </li>
-        ))}
-      </List>
-    </div>
+    <CastList>
+      {castList.length > 0
+        ? castList.map(({ id, name, profile_path, character }) => (
+            <CastItem key={id}>
+              <img
+                src={
+                  profile_path
+                    ? `https://image.tmdb.org/t/p/w200${profile_path}`
+                    : `http://www.suryalaya.org/images/no_image.jpg`
+                }
+                alt="actor"
+                loading="lazy"
+                width={120}
+                height={180}
+              />
+              <Name>{name}</Name>
+              <Character> Character: {character}</Character>
+            </CastItem>
+          ))
+        : "Sorry, there isn't any info :("}
+    </CastList>
   );
 };
 

@@ -1,11 +1,16 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
-export const List = styled.ul`
-  list-style-type: none;
+export const CastList = styled.ul`
+  list-style: none;
 `;
-
-export const Text = styled.p`
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 10px;
+export const CastItem = styled.li`
+  margin: 10px 0 16px;
+  padding: 2px 8px;
+  //box-shadow: 1px 2px 4px 3px rgba(0, 0, 0, 0.5);
+`;
+export const Name = styled.h3`
+  margin: 8px 0;
+`;
+export const Character = styled.p`
+  margin: 0;
 `;

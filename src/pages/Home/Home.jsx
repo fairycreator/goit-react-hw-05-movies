@@ -1,60 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { fetchTrending } from '../../components/API/Api';
-
-import PropTypes from 'prop-types';
+import { MovieLink, MovieList, Title } from './Home.styled';
+import { getTrending } from '../../components/API/Api';
 import Loader from '../../components/Loader/Loader';
-import { Main, Title, StyledList, StyledItem, MovieLink } from './Home.styled';
 
 const Home = () => {
-  const [films, setFilms] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [trendMovies, setTrendMovies] = useState([]);
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchTrendingFilms = () => {
-      setLoading(true);
-
-      fetchTrending()
-        .then(trendingFilms => {
-          setFilms(trendingFilms);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
-
-    fetchTrendingFilms();
+    setIsLoading(true);
+    getTrending().then(data => {
+      setTrendMovies(data.results);
+      setIsLoading(false);
+    });
   }, []);
 
   return (
-    <Main>
-      <Title>Trending today</Title>
-      <StyledList>
-        {films.map(film => (
-          <StyledItem key={film.id}>
-            <MovieLink to={`/movies/${film.id}`} state={{ from: location }}>
-              {film.title}
+    <main>
+      <Title>Top Movies for today</Title>
+      <MovieList>
+        {trendMovies.map(movie => (
+          <li key={movie.id}>
+            <MovieLink to={`/movies/${movie.id}`} state={{ from: location }}>
+              {movie.original_title || movie.name}
             </MovieLink>
-          </StyledItem>
+          </li>
         ))}
-      </StyledList>
-
-      {loading && <Loader />}
-    </Main>
+        {isLoading && <Loader />}
+      </MovieList>
+    </main>
   );
 };
-
-Home.propTypes = {
-  films: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-    })
-  ),
-};
-
 export default Home;
